@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
   TFile* outputFile = TFile::Open("output_histograms.root", "recreate");
   TH1D* dielectron_mass = new TH1D("dielectron_mass", "", 200, 0., 200.);
   TH1D* dielectron_mass_lowfbrem = new TH1D("dielectron_mass_lowfbrem", "", 200, 0., 200.);
-  TH1D* dielectron_mass_onecluster = new TH1D("dielectron_mass_onecluster", "", 200, 0., 200.);
+  //  TH1D* dielectron_mass_onecluster = new TH1D("dielectron_mass_onecluster", "", 200, 0., 200.);
   TH1D* dielectron_mass_golden = new TH1D("dielectron_mass_golden", "", 200, 0., 200.);
   
   while (!fileReader.eof()) {
@@ -58,9 +58,9 @@ int main(int argc, char** argv) {
 	dielectron_mass_lowfbrem->Fill((els_p4().at(0)+els_p4().at(1)).mass(), evt_scale1fb()); 
       }
 
-      if (els_nSeed().at(0) == 0 && els_nSeed().at(1) == 0) {
-	dielectron_mass_onecluster->Fill((els_p4().at(0)+els_p4().at(1)).mass(), evt_scale1fb()); 
-      }
+      //      if (els_nSeed().at(0) == 0 && els_nSeed().at(1) == 0) {
+      //	dielectron_mass_onecluster->Fill((els_p4().at(0)+els_p4().at(1)).mass(), evt_scale1fb()); 
+      //      }
 
       if (els_class().at(0) == GOLDEN && els_class().at(1) == GOLDEN) {
 	dielectron_mass_golden->Fill((els_p4().at(0)+els_p4().at(1)).mass(), evt_scale1fb()); 
@@ -74,7 +74,7 @@ int main(int argc, char** argv) {
   outputFile->cd();
   dielectron_mass->Write();
   dielectron_mass_lowfbrem->Write();
-  dielectron_mass_onecluster->Write();
+  //  dielectron_mass_onecluster->Write();
   dielectron_mass_golden->Write();
   outputFile->Close();
   
