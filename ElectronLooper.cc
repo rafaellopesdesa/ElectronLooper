@@ -28,10 +28,10 @@ void ElectronLooper(TString inputList) {
    TBranch* Thirdbranch  = redTree.Branch("onecluster", &dielectron_mass_onecluster, "dielectron_mass_onecluster/F");
    TBranch* Fourthbranch = redTree->Branch("golden", &dielectron_mass_golden, "dielectron_mass_golden/F");
 
-  while (!fileReader.eof()) {
+   while (!fileReader.eof()) {
 
     reader.ReadLine(fileReader);
-    if (reader.Length() < 1) continue;
+    if (reader.Length() < 2) continue;
     cout << "Opening file " << reader.Data() << endl;
 
     TFile* fileHandle = TFile::Open(reader);
