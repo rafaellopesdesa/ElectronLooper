@@ -23,10 +23,10 @@ void ElectronLooper(TString inputList) {
   //TH1D* dielectron_mass_golden = new TH1D("dielectron_mass_golden", "", 200, 0., 200.);
   Float_t dielectron_mass, dielectron_mass_lowfbrem, dielectron_mass_golden,dielectron_mass_onecluster;
 
-   TBranch* Firstbranch  = redTree->Branch("DiElectmass", &dielectron_mass, "dielectron_mass/F");
-   TBranch* Secondbranch = redTree->Branch("lowfbrem", &dielectron_mass_lowfbrem, "dielectron_mass_lowfbrem/F");
-   TBranch* Thirdbranch  = redTree->Branch("onecluster", &dielectron_mass_onecluster, "dielectron_mass_onecluster/F");
-   TBranch* Fourthbranch = redTree->Branch("golden", &dielectron_mass_golden, "dielectron_mass_golden/F");
+  TBranch* Firstbranch  = redTree->Branch("DiElectmass", &dielectron_mass, "dielectron_mass/F");
+  TBranch* Secondbranch = redTree->Branch("lowfbrem", &dielectron_mass_lowfbrem, "dielectron_mass_lowfbrem/F");
+  TBranch* Thirdbranch  = redTree->Branch("onecluster", &dielectron_mass_onecluster, "dielectron_mass_onecluster/F");
+  TBranch* Fourthbranch = redTree->Branch("golden", &dielectron_mass_golden, "dielectron_mass_golden/F");
 
    while (!fileReader.eof()) {
 
@@ -58,17 +58,17 @@ void ElectronLooper(TString inputList) {
 
       if (els_p4().size() < 2) continue;
       
-      redTree->Fill((els_p4().at(0)+els_p4().at(1)).mass(), evt_scale1fb());
+      Firstbranch->Fill((els_p4().at(0)+els_p4().at(1)).mass(), evt_scale1fb());
       
      
       
       if (els_fbrem().at(0) < 0.5 && els_fbrem().at(1) < 0.5) {
       Secondbranch->Fill((els_p4().at(0)+els_p4().at(1)).mass(), evt_scale1fb()); 
-      }
+       }
 
       if (els_nSeed().at(0) == 0 && els_nSeed().at(1) == 0) {
       Thirdbranch->Fill((els_p4().at(0)+els_p4().at(1)).mass(), evt_scale1fb()); 
-      }
+       }
 
       if (els_class().at(0) == GOLDEN && els_class().at(1) == GOLDEN) {
       Fourthbranch->Fill((els_p4().at(0)+els_p4().at(1)).mass(), evt_scale1fb()); 
