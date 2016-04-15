@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
 
            if (els_p4().size() < 2) continue;
            if ((electronId_WP2012_v3(0, TIGHT) != PassAllWP2012Cuts) || (electronId_WP2012_v3(1, TIGHT) != PassAllWP2012Cuts)) continue;
-      /*----------------------------Filling the mass-----------------------------------------------------*/
+      /*----------------------------Filling the mass,Pt,En,Eta with tight eletrons-----------------------------------------------------*/
 	   diElectMass->Fill((els_p4().at(0)+els_p4().at(1)).mass(), evt_scale1fb()); 
 	   diElectPt->Fill((els_p4().at(0)+els_p4().at(1)), evt_scale1fb());
 	   diElectEn->Fill(els_p4().at(0).e()+els_p4().at(1).e(),evt_scale1fb();
