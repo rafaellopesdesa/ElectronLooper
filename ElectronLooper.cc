@@ -77,13 +77,13 @@ int main(int argc, char** argv) {
 
            if (els_p4().size() < 2) continue;
            if ((electronId_WP2012_v3(0, TIGHT) != PassAllWP2012Cuts) || (electronId_WP2012_v3(1, TIGHT) != PassAllWP2012Cuts)) continue;
-      /*----------------------------Filling the mass,Pt,En,Eta with tight eletrons-----------------------------------------------------*/
+      /*----------------------------Filling the mass,  Pt  , En  , Eta with tight eletrons-----------------------------------------------------*/
 	   diElectMass->Fill((els_p4().at(0)+els_p4().at(1)).mass(), evt_scale1fb()); 
 	   diElectPt->Fill((els_p4().at(0)+els_p4().at(1)), evt_scale1fb());
-	   diElectEn->Fill(els_p4().at(0).e()+els_p4().at(1).e(),evt_scale1fb();
+	   diElectEn->Fill(els_p4().at(0).e()+els_p4().at(1).e(),evt_scale1fb());
 	   electron_eta[0]=els_p4().at(0).eta();
 	   electron_eta[1]=els_p4().at(1).eta();
-	   diElectEta->Fill(electron_eta[0],electron_eta[1], evt_scale1fb())
+	   ElectronEta->Fill(electron_eta[0],electron_eta[1], evt_scale1fb())
       /*-----------------------filling mass, pt, eta, and Energy for lowfbrem------------------------------*/
            if (els_fbrem().at(0) < 0.5 && els_fbrem().at(1) < 0.5) {
 	     lowfbremMass->Fill((els_p4().at(0)+els_p4().at(1)).mass(), evt_scale1fb()); 
@@ -97,9 +97,9 @@ int main(int argc, char** argv) {
            if (els_nSeed().at(0) == 0 && els_nSeed().at(1) == 0) {
 	     oneclusterMass->Fill((els_p4().at(0)+els_p4().at(1)).mass(), evt_scale1fb()); 
 	     oneclusterPt->Fill((els_p4().at(0)+els_p4().at(1)), evt_scale1fb());
-	     electron_eta_onecluste[0]=els_p4().at(0).eta();
-	     electron_eta_onecluste[1]=els_p4().at(1).eta();
-	     oneclusterEta->Fill(electron_eta_onecluste[0],electron_eta_onecluste[1], evt_scale1fb());
+	     electron_eta_onecluster[0]=els_p4().at(0).eta();
+	     electron_eta_onecluster[1]=els_p4().at(1).eta();
+	     oneclusterEta->Fill(electron_eta_onecluster[0],electron_eta_onecluster[1], evt_scale1fb());
 	     oneclusterEn->Fill(els_p4().at(0).e()+els_p4().at(1).e(),evt_scale1fb())
        /*----------------------filling -filling mass, pt, eta, and Energy for golden---------------------- */
             }
