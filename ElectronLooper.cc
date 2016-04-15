@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
 	     electron_eta_lowfbrem[0]=els_p4().at(0).eta();
 	     electron_eta_lowfbrem[1]=els_p4().at(1).eta();
 	     lowfbremEta->Fill(electron_eta_lowfbrem[0],electron_eta_lowfbrem[1], evt_scale1fb());
-	     lowfbremEn->Fill(els_p4().at(0).e(),els_p4().at(1).e(),evt_scale1fb())
+	     lowfbremEn->Fill(els_p4().at(0).e()+els_p4().at(1).e(),evt_scale1fb())
       }
       /*----------------------filling -filling mass, pt, eta, and Energy for oncluster---------------------- */
            if (els_nSeed().at(0) == 0 && els_nSeed().at(1) == 0) {
@@ -94,8 +94,8 @@ int main(int argc, char** argv) {
 	     oneclusterPt->Fill((els_p4().at(0)+els_p4().at(1)), evt_scale1fb());
 	     electron_eta_onecluste[0]=els_p4().at(0).eta();
 	     electron_eta_onecluste[1]=els_p4().at(1).eta();
-	     oneclusterEta->Fill(electron_eta_onecluste[1],electron_eta_onecluste[1], evt_scale1fb());
-	     oneclusterEn->Fill(els_p4().at(0).e(),els_p4().at(1).e(),evt_scale1fb())
+	     oneclusterEta->Fill(electron_eta_onecluste[0],electron_eta_onecluste[1], evt_scale1fb());
+	     oneclusterEn->Fill(els_p4().at(0).e()+els_p4().at(1).e(),evt_scale1fb())
        /*----------------------filling -filling mass, pt, eta, and Energy for golden---------------------- */
             }
 
@@ -104,8 +104,8 @@ int main(int argc, char** argv) {
 	     goldenPt->Fill((els_p4().at(0)+els_p4().at(1)), evt_scale1fb());
 	     electron_eta_golden[0]=els_p4().at(0).eta();
 	     electron_eta_golden[1]=els_p4().at(1).eta();
-	     goldenEta->Fill(electron_eta_golden[1],electron_eta_golden[1], evt_scale1fb());
-	     goldenEn->Fill(els_p4().at(0).e(),els_p4().at(1).e(),evt_scale1fb())
+	     goldenEta->Fill(electron_eta_golden[0],electron_eta_golden[1], evt_scale1fb());
+	     goldenEn->Fill(els_p4().at(0).e()+els_p4().at(1).e(),evt_scale1fb())
       
       }
       
