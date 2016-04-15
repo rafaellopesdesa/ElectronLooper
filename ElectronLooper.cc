@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
   TTree* redTree = new TTree ("redTree","a small Tree");
    /*------------------------------ this is for the mass---------------------------------------------------------------------------------------------*/
   Float_t dielectron_mass,dielectron_mass_lowfbrem,dielectron_mass_onecluster,dielectron_mass_golden;
-  TBranch* diElectMass     = redTree->Branch("diElectmass", &dielectron_mass, "dielectron_mass/F");
+  TBranch* diElectMass     = redTree->Branch("diElectMass", &dielectron_mass, "dielectron_mass/F");
   TBranch* lowfbremMass    = redTree->Branch("lowfbrem", &dielectron_mass_lowfbrem, "dielectron_mass_lowfbrem/F");
   TBranch* oneclusterMass  = redTree->Branch("onecluster", &dielectron_mass_onecluster, "dielectron_mass_onecluster/F");
   TBranch* goldenMass      = redTree->Branch("golden", &dielectron_mass_golden, "dielectron_mass_golden/F");
@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
   Float_t electron_eta_lowfbrem[2]={0};
   Float_t electron_eta_onecluster[2]={0};
   Float_t electron_eta_golden[2]={0};
-  TBranch* ElectronEta       = redTree->Branch("ElectronEta", electron_eta, "electron_eta[2]/F");
+  TBranch* ElectronEta      = redTree->Branch("ElectronEta", electron_eta, "electron_eta[2]/F");
   TBranch* lowfbremEta      = redTree->Branch("lowfbremEta", electron_eta_lowfbrem, "electron_pt_lowfbrem[2]/F");
   TBranch* oneclusterEta    = redTree->Branch("oneclusterEta", electron_eta_onecluster, "electron_eta_onecluster[2]/F");
   TBranch* goldenEta        = redTree->Branch("goldenEta", electron_eta_golden, "electron_eta_golden[2]/F");
@@ -79,6 +79,11 @@ int main(int argc, char** argv) {
            if ((electronId_WP2012_v3(0, TIGHT) != PassAllWP2012Cuts) || (electronId_WP2012_v3(1, TIGHT) != PassAllWP2012Cuts)) continue;
       /*----------------------------Filling the mass-----------------------------------------------------*/
 	   diElectMass->Fill((els_p4().at(0)+els_p4().at(1)).mass(), evt_scale1fb()); 
+	   diElectPt->Fill((els_p4().at(0)+els_p4().at(1)), evt_scale1fb());
+	   diElectEn->Fill(els_p4().at(0).e()+els_p4().at(1).e(),evt_scale1fb();
+	   electron_eta[0]=els_p4().at(0).eta();
+	   electron_eta[1]=els_p4().at(1).eta();
+	   diElectEta->Fill(electron_eta[0],electron_eta[1], evt_scale1fb())
       /*-----------------------filling mass, pt, eta, and Energy for lowfbrem------------------------------*/
            if (els_fbrem().at(0) < 0.5 && els_fbrem().at(1) < 0.5) {
 	     lowfbremMass->Fill((els_p4().at(0)+els_p4().at(1)).mass(), evt_scale1fb()); 
