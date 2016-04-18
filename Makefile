@@ -16,13 +16,13 @@ endif
 
 CC=g++
 
-INCLUDE=$(shell root-config --cflags) -I./ -I./CORE/
+INCLUDE=$(shell root-config --cflags) -I./ -I./CORE/ -I./Tools/
 CFLAGS=$(INCLUDE)
 
 LINKER=g++
 LINKERFLAGS=$(shell root-config --libs) -lEG -lGenVector -lTMVA -L./CORE/ -Wl,-rpath,./CORE/ -lCMS2NtupleMacrosCORE
 
-SOURCES=ElectronLooper.cc
+SOURCES=ElectronLooper.cc Tools/goodrun.cc
 OBJECTS=$(SOURCES:.cc=.o)
 
 LIBS=CORE/libCMS2NtupleMacrosCORE.so
