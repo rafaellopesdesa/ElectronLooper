@@ -6,6 +6,8 @@
 #include "electronSelections.h"
 #include "eventSelections.h"
 
+#include "TSystem.h"
+
 using namespace std;
 using namespace tas;
 using namespace wp2012;
@@ -19,12 +21,21 @@ int main(int argc, char** argv) {
   TString reader;
   ifstream fileReader(argv[1]);
 
-  TFile* outputFile = TFile::Open("tight_small_Tree.root", "recreate");
+  int nfile = -1;
+  TString outputDir(".");
+  if (argc > 2)
+    nfile = TString(argv[2]).Atoi();
+  if (argc > 3)
+    outputDir = argv[3];
+    
+  TFile* outputFile;
+  if (nfile > 0) {
+    outputFile = TFile::Open(TString::Format("%s/ntuple_%d.root", outputDir.Data(), nfile), "recreate");
+  } else {
+    outputFile = TFile::Open(TString::Format("%s/ntuple.root", outputDir.Data()), "recreate");
+  }
   TTree* redTree = new TTree ("redTree","a small Tree");
-   /*------------------------------ this is for the mass---------------------------------------------------------------------------------------------*/
-   //Float_t dielectron_mass;
-  //  Float_t dielectron_mass,dielectron_mass_lowfbrem,dielectron_mass_onecluster,dielectron_mass_golden;
-  // RCLSA: this is a tree, not a histogram
+
   LorentzVector electron0_p4;
   LorentzVector electron1_p4;
   LorentzVector dielectron_p4;
@@ -60,38 +71,16 @@ int main(int argc, char** argv) {
   redTree->Branch("lumi", &lumi);
 
   
-  // redTree->Branch("diElectMass", &dielectron_mass, "diElectMass/F");
-  // redTree->Branch("lowfbremMass", &dielectron_mass_lowfbrem, "lowfbremMass/F");
-  // redTree->Branch("oneclusterMass", &dielectron_mass_onecluster, "oneclusterMass/F");
-  // redTree->Branch("goldenMass", &dielectron_mass_golden, "goldenMass/F");
-  // /*---------------------------this is for pt---------------------------------------------------------------------------------------------------------*/
+  TString DQdir(gSystem->Getenv("EL_DQDIR"));
+  if (DQdir.Length() < 2) DQdir = "./DQ";
+  set_goodrun_file(TString::Format("%s/Cert_190456-208686_8TeV_PromptReco_Collisions12_JSON_goodruns.txt", DQdir.Data()));
   
-  // Float_t  dielectron_pt,dielectron_pt_lowfbrem,dielectron_pt_onecluster,dielectron_pt_golden;
-  // redTree->Branch("diElectPt", &dielectron_pt, "diElectPt/F");
-  // redTree->Branch("lowfbremPt", &dielectron_pt_lowfbrem, "lowfbremPt/F");
-  // redTree->Branch("oneclusterPt", &dielectron_pt_onecluster, "oneclusterPt/F");
-  // redTree->Branch("goldenPt", &dielectron_pt_golden, "goldenPt/F");
-  //  /*here I decided to add eta in my reduiced ntuple in order to be able to change its value for others selections, I declared it as an array because of two electrons*/
-  // /*eta[0] to get the first electron and eta[1] the second electron so I will be able to do for instance redTree -> Draw("mass","|eta[0]| < 0.8 && |eta[0]| < 0.8","prof")*/
-  // Float_t electron_eta[2]={0};
-  // Float_t electron_eta_lowfbrem[2]={0};
-  // Float_t electron_eta_onecluster[2]={0};
-  // Float_t electron_eta_golden[2]={0};
-  // redTree->Branch("ElectronEta", electron_eta, "ElectronEta[2]/F");
-  // redTree->Branch("lowfbremEta", electron_eta_lowfbrem, "lowfbremEta[2]/F");
-  // redTree->Branch("oneclusterEta", electron_eta_onecluster, "oneclusterEta[2]/F");
-  // redTree->Branch("goldenEta", electron_eta_golden, "goldenEta[2]/F");
-  // /*------------------------this is for energy-----------------------------------------------------------------------------------------------------------*/
-  // Float_t dielectron_energy,dielectron_energy_lowfbrem,dielectron_energy_onecluster,dielectron_energy_golden;
-  // redTree->Branch("diElectEn", &dielectron_energy, "diElectEn/F");
-  // redTree->Branch("lowfbremEn", &dielectron_energy_lowfbrem, "lowfbremEn/F");
-  // redTree->Branch("oneclusterEn", &dielectron_energy_onecluster, "oneclusterEn/F");
-  // redTree->Branch("goldenEn", &dielectron_energy_golden, "goldenEn/F");
-  // /*---------------------------------------------------------////-----------------------------------------------------------------------------------------*/
- 
-  set_goodrun_file("DQ/Cert_190456-208686_8TeV_PromptReco_Collisions12_JSON_goodruns.txt");
-  
+  int ifile = -1; // counts the files
   while (!fileReader.eof()) {
+
+    // for cluster running
+    ifile++;
+    if (nfile > 0 && nfile != ifile) continue;
 
     reader.ReadLine(fileReader);
     if (reader.Length() < 2) continue;
@@ -123,15 +112,6 @@ int main(int argc, char** argv) {
       event = -999;
       lumi = -999;
 
-      // cout << "I found " << els_p4().size() << " electrons" << endl;      
-      // for (int ielec = 0; ielec < els_p4().size(); ielec++) {
-      // 	cout << "   Electron " << ielec << endl;
-      // 	cout << "       Four-momentum:         " << els_p4().at(ielec).px() << " " << els_p4().at(ielec).py() << " " << els_p4().at(ielec).pz() << " " << els_p4().at(ielec).e() << endl;
-      // 	cout << "       eta, phi, pt:          " << els_p4().at(ielec).eta() << " " << els_p4().at(ielec).phi() << " " << els_p4().at(ielec).pt() << endl;
-      // 	cout << "       Number of pixel hits:  " << els_valid_pixelhits().at(ielec) << endl;
-      // 	cout << "       R9:                    " << els_r9().at(ielec) << endl;
-      // }
-
       int electron0_idx = -1;
       int electron1_idx = -1;
       
@@ -162,51 +142,11 @@ int main(int argc, char** argv) {
       lumi = evt_lumiBlock();
       
       redTree->Fill();
-      // /*----------------------------Filling the mass,  Pt  , En  , Eta with tight eletrons-----------------------------------------------------*/
-      // 	   dielectron_mass = (els_p4().at(0)+els_p4().at(1)).mass(); 
-      // 	   //cout << els_p4().at(0).pt()+els_p4().at(1).pt()<< endl;
-      // 	   dielectron_pt = els_p4().at(0).pt()+els_p4().at(1).pt();
-      // 	   dielectron_energy = els_p4().at(0).e()+els_p4().at(1).e();
-      // 	   electron_eta[0]=els_p4().at(0).eta();
-      // 	   electron_eta[1]=els_p4().at(1).eta();
-	   
-      // /*-----------------------filling mass, pt, eta, and Energy for lowfbrem------------------------------*/
-      //      if (els_fbrem().at(0) < 0.5 && els_fbrem().at(1) < 0.5) {
-      // 	   dielectron_mass_lowfbrem = (els_p4().at(0)+els_p4().at(1)).mass(); 
-      // 	   dielectron_pt_lowfbrem = els_p4().at(0).pt()+els_p4().at(1).pt();
-      // 	   dielectron_energy_lowfbrem = els_p4().at(0).e()+els_p4().at(1).e();
-      // 	   electron_eta_lowfbrem[0]=els_p4().at(0).eta();
-      // 	   electron_eta_lowfbrem[1]=els_p4().at(1).eta();
-      // 	    }
-      // /*----------------------filling -filling mass, pt, eta, and Energy for oncluster---------------------- */
-      // 	    if (els_nSeed().at(0) == 0 && els_nSeed().at(1) == 0) {
-      // 	   dielectron_mass_onecluster = (els_p4().at(0)+els_p4().at(1)).mass(); 
-      // 	   dielectron_pt_onecluster = els_p4().at(0).pt()+els_p4().at(1).pt();
-      // 	   electron_eta_onecluster[0]=els_p4().at(0).eta();
-      // 	   electron_eta_onecluster[1]=els_p4().at(1).eta();
-      // 	   dielectron_energy_onecluster = els_p4().at(0).e()+els_p4().at(1).e();
-      //  /*----------------------filling -filling mass, pt, eta, and Energy for golden---------------------- */
-      // 	   }
-
-      // 	   if (els_class().at(0) == GOLDEN && els_class().at(1) == GOLDEN) {
-      // 	    dielectron_mass_golden  = (els_p4().at(0)+els_p4().at(1)).mass(); 
-      // 	    dielectron_pt_golden = els_p4().at(0).pt()+els_p4().at(1).pt();
-      // 	    electron_eta_golden[0]=els_p4().at(0).eta();
-      // 	    electron_eta_golden[1]=els_p4().at(1).eta();
-      // 	    dielectron_energy_golden = els_p4().at(0).e()+els_p4().at(1).e();
-      
-      // 	     }
-      // redTree->Fill();
     }
   }
 
   outputFile->cd();
-  //dielectron_mass->Write();
-  //dielectron_mass_lowfbrem->Write();
-  //  dielectron_mass_onecluster->Write();
-  //dielectron_mass_golden->Write();
-  //redTree->Fill();
   redTree->Write();
   outputFile->Close();
-  
+
 }

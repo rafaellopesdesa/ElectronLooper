@@ -20,12 +20,11 @@ INCLUDE=$(shell root-config --cflags) -I./ -I./CORE/ -I./Tools/
 CFLAGS=$(INCLUDE)
 
 LINKER=g++
-LINKERFLAGS=$(shell root-config --libs) -lEG -lGenVector -lTMVA -L./CORE/ -Wl,-rpath,./CORE/ -lCMS2NtupleMacrosCORE
+LINKERFLAGS=$(shell root-config --libs) -lEG -lGenVector -lTMVA
 
-SOURCES=ElectronLooper.cc Tools/goodrun.cc
+SOURCES=CORE/MITConversionUtilities.cc CORE/muonSelections.cc CORE/conversionTools.cc CORE/trackSelections.cc CORE/CMS2.cc CORE/electronSelections.cc CORE/electronSelectionsParameters.cc CORE/eventSelections.cc ElectronLooper.cc Tools/goodrun.cc
 OBJECTS=$(SOURCES:.cc=.o)
 
-LIBS=CORE/libCMS2NtupleMacrosCORE.so
 EXE=ElectronLooper.exe
 
 .PRECIOUS: $(LIBS) $(OBJECTS)

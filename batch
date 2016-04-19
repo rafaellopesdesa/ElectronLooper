@@ -1,0 +1,15 @@
+#!/bin/bash
+
+memory=12000
+diskspace=12000
+queue=8nm
+filelist=${PWD}/${1}
+
+jobnum=${2}
+
+execdir=${PWD}
+coredir=${PWD}/CORE/
+dqdir=${PWD}/DQ/
+outputdir=${PWD}/output
+
+bsub -q ${queue} -C 0  -R "rusage[mem=${memory}:pool=${diskspace}]" "export PRODHOME=`pwd`; export EL_DQDIR=${dqdir} ; LSB_JOB_REPORT_MAIL="N" ; ${execdir}/ElectronLooper.exe ${filelist} ${jobnum} ${outputdir}"
